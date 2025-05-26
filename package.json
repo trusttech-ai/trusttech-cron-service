@@ -1,0 +1,24 @@
+{
+  "name": "trusttech-cron-service",
+  "version": "1.0.0",
+  "description": "A Node.js project to run CRON jobs using TypeScript.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.8.2",
+    "axios": "^1.9.0",
+    "node-cron": "^4.0.7"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.0",
+    "prisma": "^6.8.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "author": "Ryan Basque",
+  "license": "ISC"
+}
