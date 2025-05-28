@@ -1,0 +1,25 @@
+services:
+
+  postgres-docker:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=tt_cron_service_db
+      - POSTGRES_USER=trusttech_service_docker
+      - POSTGRES_PASSWORD=trusttech_service_docker_password
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "trusttech_service_docker", "-d", "tt_cron_service_db"]      
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "3200:5432"
+
+  app:
+    build: .
+    restart: always
+    env_file: .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres-docker:
+        condition: service_healthy
