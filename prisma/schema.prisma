@@ -9,6 +9,8 @@ datasource db {
 
 model trusttech_messages_log {
   id           String    @id @default(uuid()) @db.Uuid
+  host_number  String?   @db.VarChar(25)
+  host_name  String?   @db.VarChar(25)
   user_number  String?   @db.VarChar(25)
   user_name    String?
   user_message String?
@@ -19,7 +21,10 @@ model trusttech_messages_log {
 
 model trusttech_rewind_cron {
   id           String   @id @default(uuid()) @db.Uuid
+  host_name  String?   @db.VarChar(25)
+  host_number  String?   @db.VarChar(25)
   user_number  String   @db.VarChar(25)
+  user_name    String?  @db.VarChar(25)
   active       Boolean
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
