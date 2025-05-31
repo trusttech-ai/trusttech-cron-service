@@ -1,27 +1,37 @@
-import cron from 'node-cron';
-import { PrismaClient } from '@prisma/client'
+import cron from "node-cron";
+import { PrismaClient } from "@prisma/client";
 
-import { RewindMessagesJob } from './jobs/rewindMessagesJob';
+import { RewindMessagesJob } from "./jobs/rewindMessagesJob";
+import { TablesHealthyJob } from "./jobs/tablesHealthy";
 
 const prisma = new PrismaClient();
 
 const rewindMessagesJob = new RewindMessagesJob(prisma);
+const tablesHealthyJob = new TablesHealthyJob();
 
 async function testDatabaseConnection() {
   try {
     await prisma.$connect();
-    console.log('[Prisma] Database connection established successfully.');
+    await prisma.trusttech_rewind_cron.count();
+    await prisma.trusttech_messages_log.count();
   } catch (error) {
-    console.error('[Prisma] Failed to connect to the database:', error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
+    console.error("[Prisma] Failed to connect to the database:", errorMessage);
     process.exit(1);
   }
 }
 
 testDatabaseConnection();
 
-cron.schedule('0 9 * * 1-5', () => {
-    rewindMessagesJob.execute()
-    console.log('[Rewind] Messages Job executed at 9 AM on weekdays.');
+// Send service Healthy messagens to owner
+cron.schedule("0,30 * * * *", () => {
+  tablesHealthyJob.execute();
 });
 
-console.log('CRON Service Initalized.');
+// Send rewind messages to frist users
+cron.schedule("0 9 * * 1-5", () => {
+  rewindMessagesJob.execute();
+});
+
+console.log("CRON Service Initalized.");
