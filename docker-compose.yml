@@ -14,7 +14,7 @@ services:
     ports:
       - "3200:5432"
 
-  app:
+  cron-service-app:
     build: .
     restart: always
     env_file: .env
