@@ -29,17 +29,17 @@ async function testDatabaseConnection() {
 app.use(healthRoutes);
 app.listen(3000, "0.0.0.0", () => console.log("CRON Service Initialized."));
 
-testDatabaseConnection();
+// testDatabaseConnection();
 
-cron.schedule("*/30 * * * *", () => {
-  // Send service Healthy messagens to owner
-  tablesHealthyJob.execute();
-});
+// cron.schedule("*/30 * * * *", () => {
+//   // Send service Healthy messagens to owner
+//   tablesHealthyJob.execute();
+// });
 
-cron.schedule("0 9 * * 1-5", () => {
-  // Send rewind messages to first users
-  rewindMessagesJob.execute();
-});
+// cron.schedule("0 9 * * 1-5", () => {
+//   // Send rewind messages to first users
+//   rewindMessagesJob.execute();
+// });
 
 cron.schedule("0 8 * * *", () => {
   // Send good morning CEO message to Kumasutra
