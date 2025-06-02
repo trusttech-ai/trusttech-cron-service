@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from "axios";
 
 export class HttpClient {
   private client: AxiosInstance;
@@ -8,14 +8,22 @@ export class HttpClient {
       baseURL,
       timeout: 5000,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
   }
 
-  async post<T = any>(url: string, data: any, headers?: any): Promise<T> {
+  async get<T = any>(url: string, headers?: any): Promise<T> {
+    const response = await this.client.get<T>(url, {
+      headers,
+    });
+
+    return response.data;
+  }
+
+  async post<T = any>(url: string, data?: any, headers?: any): Promise<T> {
     const response = await this.client.post<T>(url, data, {
-        headers,
+      headers,
     });
 
     return response.data;

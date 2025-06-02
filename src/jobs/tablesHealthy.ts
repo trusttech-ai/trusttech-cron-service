@@ -4,35 +4,47 @@ export class TablesHealthyJob {
   private evolutionApi = new HttpClient("https://evo.trusttech.space");
 
   async execute() {
-    const text = `[trusttech-cron-service] - [${new Date().toLocaleString(
-      "pt-BR",
-      {
-        timeZone: "America/Sao_Paulo",
-      }
-    )}}] Executed successfully.`;
+    try {
+      await this.evolutionApi.get("/instance/fetchInstances", {
+        apiKey: process.env.EVOLUTION_API_TRUSTTECH_KEY,
+      });
 
-    const body = {
-      number: process.env.HEALTHY_NUMBER,
-      text,
-    };
+      await this.evolutionApi.get("/instance/fetchInstances", {
+        apiKey: process.env.EVOLUTION_API_KUMASUTRA_KEY,
+      });
+    } catch (error) {
+      const err = error as Error;
+      console.error(
+        "[TablesHealthyJob] Failed to fetch instances:",
+        err.message
+      );
+      return;
+    }
 
-    await this.evolutionApi.post("/message/sendText/tt_avivos", body, {
-      apiKey: process.env.EVOLUTION_API_TRUSTTECH_TEST_KEY,
-    });
+    // console.log(text);
+  }
 
-    const bodyTwo = {
-      number: process.env.SECOND_HEALTHY_NUMBER,
-      text,
-    };
+  private async fetchIntances(instance: string, apiKey: string) {
+    try {
+      await this.evolutionApi.get("/instance/fetchInstances", {
+        apiKey: process.env.EVOLUTION_API_TRUSTTECH_KEY,
+      });
+    } catch (error) {
+      const err = error as Error;
 
-    await this.evolutionApi.post("/message/sendText/tt_avivos", bodyTwo, {
-      apiKey: process.env.EVOLUTION_API_TRUSTTECH_TEST_KEY,
-    });
+      console.error(
+        `[TablesHealthyJob - ${instance}] Failed to fetch instances:`,
+        err.message
+      );
 
-    console.log(
-      `[trusttech-cron-service] - [${new Date().toLocaleString("pt-BR", {
-        timeZone: "America/Sao_Paulo",
-      })}}] Executed successfully.`
-    );
+      const body = {
+        nuumber: "5511951083595",
+        text: `⚠️ *${instance}* instance is down!`,
+      };
+
+      await this.evolutionApi.post("/sendText/tt_avivos", body, {
+        apiKey: process.env.EVOLUTION_API_TRUSTTECH_WARNINGS_KEY,
+      });
+    }
   }
 }

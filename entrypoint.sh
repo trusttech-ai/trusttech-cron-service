@@ -1,14 +1,16 @@
-#!/bin/bash
+#!/bin/sh
+set -e
 
-echo "🔄 Waiting for the database to be ready..."
-
-# Aguarda o banco responder
-until yarn prisma db push; do
-  >&2 echo "🚫 Database not available yet. Retrying..."
-  sleep 3
+echo "⏳ Esperando banco ficar pronto..."
+until nc -z cron-service-app-postgres 5432; do
+  sleep 1
 done
 
-echo "✅ Database ready and migrated! Starting application..."
+echo "✅ Banco acessível. Aguardando estabilização..."
+sleep 3
 
-# Inicia o app
-yarn start
+echo "🚀 Aplicando migrações..."
+yarn prisma migrate deploy
+
+echo "✅ Iniciando aplicação..."
+exec yarn start

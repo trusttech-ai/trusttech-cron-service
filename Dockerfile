@@ -1,5 +1,7 @@
 FROM node:20
 
+RUN apt-get update && apt-get install -y netcat-openbsd
+
 WORKDIR /app
 
 COPY package.json yarn.lock ./
@@ -14,7 +16,7 @@ ENV NODE_ENV=production
 EXPOSE 3000
 
 COPY .env .env
-COPY entrypoint.sh ./entrypoint.sh
-RUN chmod +x ./entrypoint.sh
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
 
 CMD ["./entrypoint.sh"]

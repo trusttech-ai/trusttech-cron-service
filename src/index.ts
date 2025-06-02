@@ -19,16 +19,15 @@ async function testDatabaseConnection() {
   try {
     await prisma.$connect();
     console.log("[Prisma] Successfully connected to the database.");
-  } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
-    console.error("[Prisma] Failed to connect to the database:", errorMessage);
+  } catch (err) {
+    const error = err as Error;
+    console.error("[Prisma] Failed to connect to the database:", error.message);
     process.exit(1);
   }
 }
 
 app.use(healthRoutes);
-app.listen(3333, () => console.log("CRON Service Initalized."));
+app.listen(3000, "0.0.0.0", () => console.log("CRON Service Initialized."));
 
 testDatabaseConnection();
 
@@ -38,7 +37,7 @@ cron.schedule("*/30 * * * *", () => {
 });
 
 cron.schedule("0 9 * * 1-5", () => {
-  // Send rewind messages to frist users
+  // Send rewind messages to first users
   rewindMessagesJob.execute();
 });
 

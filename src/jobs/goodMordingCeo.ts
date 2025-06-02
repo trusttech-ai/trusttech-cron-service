@@ -12,7 +12,7 @@ export class GoodMoringCeoJob {
     };
 
     await this.evolutionApi.post("/message/sendText/tt_avivos", body, {
-      apiKey: process.env.EVOLUTION_API_TRUSTTECH_TEST_KEY,
+      apiKey: process.env.EVOLUTION_API_TRUSTTECH_WARNINGS_KEY,
     });
   }
 }
