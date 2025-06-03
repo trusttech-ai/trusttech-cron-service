@@ -1,0 +1,23 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=trusttech_db
+      - POSTGRES_USER=trusttech_service_docker
+      - POSTGRES_PASSWORD=trusttech_service_docker_password
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "trusttech_service_docker", "-d", "trusttech_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5

@@ -1,25 +1,23 @@
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
 
-  cron-service-app-postgres:
+  postgres:
     image: postgres:15
     environment:
-      - POSTGRES_DB=trusttech_db
-      - POSTGRES_USER=trusttech_service_docker
-      - POSTGRES_PASSWORD=trusttech_service_docker_password
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "trusttech_service_docker", "-d", "trusttech_db"]      
+      test: CMD pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
       interval: 5s
       timeout: 5s
       retries: 5
-    ports:
-      - "3200:5432"
-
-  cron-service-app:
-    build: .
-    restart: always
-    env_file: .env
-    ports:
-      - "3000:3000"
-    depends_on:
-      cron-service-app-postgres:
-        condition: service_healthy
