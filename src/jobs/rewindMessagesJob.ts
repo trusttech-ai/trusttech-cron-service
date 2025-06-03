@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, trusttech_rewind_cron } from "@prisma/client";
 
 import { HttpClient } from "../service/httpClient";
 
@@ -24,7 +24,7 @@ export class RewindMessagesJob {
       });
 
       if (numbersToRewind.length) {
-        numbersToRewind.forEach(async (item) => {
+        for (const item of numbersToRewind as trusttech_rewind_cron[]) {
           const firstDate = new Date(item.created_at);
           const now = new Date();
 
@@ -67,7 +67,7 @@ export class RewindMessagesJob {
             );
             return;
           }
-        });
+        }
 
         return;
       }

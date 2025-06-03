@@ -2,7 +2,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
     env_file:
@@ -11,15 +11,13 @@ services:
       - postgres
 
   postgres:
-    ports:
-      - "5432:5432"
     image: postgres:15
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     healthcheck:
-      test: CMD pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+      test: [ "CMD", "pg_isready", "-U", "trusttech_service_docker", "-d", "trusttech_db" ]
       interval: 5s
       timeout: 5s
       retries: 5
