@@ -36,7 +36,7 @@ cron.schedule(
 );
 
 cron.schedule(
-  "*/1 * * * *",
+  "0 9 * * 1-5",
   () => {
     // Send rewind messages to first users
     rewindMessagesJob.execute();
