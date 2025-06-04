@@ -23,6 +23,11 @@ export class RewindMessagesJob {
         },
       });
 
+      console.log(
+        "[RewindMessagesJob] Found numbers to rewind:",
+        numbersToRewind.length
+      );
+
       if (numbersToRewind.length) {
         for (const item of numbersToRewind as trusttech_rewind_cron[]) {
           const firstDate = new Date(item.created_at);
@@ -38,7 +43,7 @@ export class RewindMessagesJob {
               linkPreview: false,
             };
 
-            await this.evolutionApi.post("/message/sendText/trusttech", body, {
+            await this.evolutionApi.post("/message/sendText/virginia", body, {
               apiKey: process.env.EVOLUTION_API_TRUSTTECH_KEY,
             });
 

@@ -24,20 +24,38 @@ const goodMoringCeoJob = new GoodMoringCeoJob();
   }
 })();
 
-cron.schedule("*/30 * * * *", () => {
-  // Send service Healthy messagens to owner
-  instancesHealthyJob.execute();
-});
+cron.schedule(
+  "*/30 * * * *",
+  () => {
+    // Send service Healthy messagens to owner
+    instancesHealthyJob.execute();
+  },
+  {
+    timezone: "America/Sao_Paulo",
+  }
+);
 
-cron.schedule("0 9 * * 1-5", () => {
-  // Send rewind messages to first users
-  rewindMessagesJob.execute();
-});
+cron.schedule(
+  "*/1 * * * *",
+  () => {
+    // Send rewind messages to first users
+    rewindMessagesJob.execute();
+  },
+  {
+    timezone: "America/Sao_Paulo",
+  }
+);
 
-cron.schedule("0 8 * * *", () => {
-  // Send good morning CEO message to Kumasutra
-  goodMoringCeoJob.execute();
-});
+cron.schedule(
+  "0 8 * * *",
+  () => {
+    // Send god morning CEO to kamasutra
+    goodMoringCeoJob.execute();
+  },
+  {
+    timezone: "America/Sao_Paulo",
+  }
+);
 
 app.use(healthRoutes);
 app.listen(3000, "0.0.0.0", () => console.log("CRON Service Initialized."));
