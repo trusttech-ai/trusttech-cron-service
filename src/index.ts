@@ -58,4 +58,4 @@ cron.schedule(
 );
 
 app.use(healthRoutes);
-app.listen(3000, "0.0.0.0", () => console.log("CRON Service Initialized."));
+app.listen(3000, () => console.log("CRON Service Initialized."));
