@@ -6,6 +6,9 @@ RUN yarn install
 
 COPY . .
 
+COPY .env .env
+RUN yarn prisma generate && yarn prisma migrate deploy
+
 EXPOSE 3000
 
 ENV NODE_ENV=development

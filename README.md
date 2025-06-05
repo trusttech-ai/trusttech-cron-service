@@ -1,44 +1,71 @@
-# Node Cron Jobs
+# Trusttech Cron Service
 
-This project is a simple Node.js application that utilizes cron jobs to perform scheduled tasks. It is built with TypeScript for better type safety and maintainability.
+Este projeto é um serviço Node.js desenvolvido em TypeScript para execução de tarefas agendadas (cron jobs) de forma automatizada e escalável. Ele utiliza Express para expor endpoints HTTP, Prisma como ORM para integração com banco de dados PostgreSQL, e Docker para facilitar o deploy e o ambiente de desenvolvimento.
 
-## Project Structure
+## Tecnologias Utilizadas
+
+- **Node.js & TypeScript**: Base do projeto, garantindo tipagem estática e robustez.
+- **Express**: Framework para rotas HTTP e health checks.
+- **Prisma**: ORM moderno para integração com PostgreSQL.
+- **PostgreSQL**: Banco de dados relacional utilizado pelo serviço.
+- **node-cron**: Agendamento de tarefas recorrentes.
+- **Axios**: Cliente HTTP para integrações externas.
+- **ESLint**: Padronização e qualidade do código.
+- **Docker**: Containerização para desenvolvimento e produção.
+- **Docker Compose**: Orquestração de múltiplos serviços (app e banco de dados).
+
+## Estrutura do Projeto
 
 ```
-node-cron-jobs
+trusttech-cron-service
 ├── src
-│   ├── index.ts          # Entry point of the application
-│   ├── jobs
-│   │   └── sampleJob.ts  # Sample cron job definition
-│   └── types
-│       └── index.ts      # Type definitions for job configurations and results
-├── package.json           # NPM configuration file
-├── tsconfig.json          # TypeScript configuration file
-└── README.md              # Project documentation
+│   ├── index.ts              # Ponto de entrada da aplicação
+│   ├── jobs/                 # Definições dos cron jobs
+│   ├── controllers/          # Controllers das rotas HTTP
+│   ├── routes/               # Definições de rotas
+│   ├── service/              # Serviços auxiliares (ex: HttpClient)
+│   └── types/                # Tipos TypeScript
+├── prisma/                   # Migrations e schema do banco
+├── package.json              # Configuração NPM
+├── tsconfig.json             # Configuração TypeScript
+├── Dockerfile                # Build para produção
+├── Dockerfile.dev            # Build para desenvolvimento
+├── docker-compose.yml        # Orquestração dos containers
+└── README.md                 # Documentação do projeto
 ```
 
-## Installation
+## Instalação
 
-To get started, clone the repository and install the dependencies:
+Clone o repositório e instale as dependências:
 
 ```bash
 git clone <repository-url>
-cd node-cron-jobs
-npm install
+cd trusttech-cron-service
+yarn install
 ```
 
-## Usage
+## Uso em Desenvolvimento
 
-To run the cron jobs, execute the following command:
+Para rodar localmente com Docker Compose (incluindo banco de dados PostgreSQL):
 
 ```bash
-npm start
+cp .env.example .env
+docker-compose -f docker-compose.dev.yml up --build
 ```
 
-## Contributing
+A aplicação estará disponível em `http://localhost:3000`.
 
-Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.
+## Scripts Úteis
 
-## License
+- `yarn dev`: Executa o serviço em modo desenvolvimento (ts-node).
+- `yarn build`: Compila o projeto para a pasta `dist`.
+- `yarn start`: Executa o serviço compilado.
+- `yarn lint`: Roda o ESLint para análise de código.
 
-This project is licensed under the MIT License.
+## Contribuição
+
+Contribuições são bem-vindas! Abra uma issue ou envie um pull request com sugestões e melhorias.
+
+## Licença
+
+Este projeto está licenciado sob a licença ISC.

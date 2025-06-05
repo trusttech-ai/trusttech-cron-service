@@ -3,9 +3,7 @@ import { PrismaClient, trusttech_rewind_cron } from "@prisma/client";
 import { HttpClient } from "../service/httpClient";
 
 export class RewindMessagesJob {
-  private evolutionApi = new HttpClient("https://evo.trusttech.space");
-
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma: PrismaClient, private evolutionApi: HttpClient) {}
 
   async execute() {
     const daysMap: Record<string, string> = {
@@ -43,6 +41,8 @@ export class RewindMessagesJob {
               linkPreview: false,
             };
 
+            console.log("[body]: ", body);
+
             await this.evolutionApi.post("/message/sendText/virginia", body, {
               apiKey: process.env.EVOLUTION_API_TRUSTTECH_KEY,
             });
@@ -53,7 +53,6 @@ export class RewindMessagesJob {
               ", message number: ",
               diffDays
             );
-            return;
           }
 
           if (diffDays > 5) {
@@ -70,7 +69,6 @@ export class RewindMessagesJob {
               "[RewindMessagesJob] Executed successfully to remove number: ",
               item.user_number
             );
-            return;
           }
         }
 

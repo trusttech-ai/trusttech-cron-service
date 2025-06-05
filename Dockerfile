@@ -25,13 +25,11 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y openssl netcat-traditional
 
-ENV POSTGRES_HOST=35.198.59.126
-ENV POSTGRES_PORT=5432
-
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY package.json ./
+COPY .env .env
 
 ENV NODE_ENV=production
 
-CMD ["sh", "-c", "until nc -z $POSTGRES_HOST $POSTGRES_PORT; do echo '⏳ Esperando banco ficar pronto...'; sleep 2; done && echo '✅ Banco pronto. Subindo app...' && node dist/index.js"]
+CMD ["sh", "-c", "until nc -z $POSTGRES_HOST $POSTGRES_PORT; do echo '⏳ Waiting for the database to be ready...'; sleep 2; done && echo '✅ Database is ready. Starting app...' && node dist/index.js"]
