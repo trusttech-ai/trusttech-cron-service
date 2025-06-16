@@ -1,13 +1,50 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model trusttech_messages_log {
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  password      String
+  name          String?
+  role          Role      @default(USER)
+  isActive      Boolean   @default(true)
+  profileImage  String?
+  lastLogin     DateTime?
+  refreshToken  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  settings      UserSettings?
+}
+
+model Session {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  token     String    @unique
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  ipAddress String?
+  userAgent String?
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserSettings {
+  id              Int     @id @default(autoincrement())
+  userId          Int     @unique
+  theme           String  @default("light")
+  emailNotifications Boolean @default(true)
+  user            User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+
+model MessagesLog {
   id           String    @id @default(uuid()) @db.Uuid
   host_number  String?   @db.VarChar(25)
   host_name  String?   @db.VarChar(25)
@@ -19,7 +56,7 @@ model trusttech_messages_log {
   updated_at   DateTime? @default(now()) @updatedAt @db.Timestamp(6)
 }
 
-model trusttech_rewind_cron {
+model RewindCron {
   id           String   @id @default(uuid()) @db.Uuid
   host_name  String?   @db.VarChar(25)
   host_number  String?   @db.VarChar(25)
@@ -28,4 +65,10 @@ model trusttech_rewind_cron {
   active       Boolean
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+  MANAGER
 }
